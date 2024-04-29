@@ -9,6 +9,19 @@ require("./db/conn");
 const router = require("./routes/router");
 const products = require("./models/productsSchema");
 const jwt = require("jsonwebtoken");
+const cors = require("cors");
+
+// Enable CORS middleware
+
+// app.use(cors());
+
+const corsOptions = {
+  origin: "https://ecommerce-website-vert-xi.vercel.app/",
+  methods: "GET,POST",
+  credentials: true, // Enable cookies across domains
+};
+app.use(cors(corsOptions));
+
 
 
 // middleware
