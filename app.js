@@ -15,7 +15,7 @@ const cors = require("cors");
 // app.use(cors());
 
 const corsOptions = {
-  origin: "mayankwebsite.vercel.app:3001",
+  origin: "http://localhost:3001",
   methods: "GET,POST",
   credentials: true, // Enable cookies across domains
 };
