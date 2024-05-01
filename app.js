@@ -15,10 +15,11 @@ const cors = require("cors");
 // app.use(cors());
 
 const corsOptions = {
-  origin: "192.168.1.9:3000",
+  origin: "http://192.168.1.9:3000",
   methods: "GET,POST",
   credentials: true, // Enable cookies across domains
 };
+
 app.use(cors(corsOptions));
 
 // middleware
