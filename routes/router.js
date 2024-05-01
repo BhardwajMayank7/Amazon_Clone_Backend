@@ -11,14 +11,6 @@ const authenicate = require("../middleware/authenticate");
 
 // get the products data
 
-router.get("/", async (req, res) => {
-  try {
-    res.json("Express running smoothly and fantastically");
-  } catch (error) {
-    console.log("error" + error.message);
-  }
-});
-
 router.get("/getproducts", async (req, res) => {
   try {
     const productsData = await products.find();

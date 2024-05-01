@@ -26,7 +26,13 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser(""));
 
-app.use(router);
+router.get("/", async (req, res) => {
+  try {
+    res.json("Express running smoothly and fantastically");
+  } catch (error) {
+    console.log("error" + error.message);
+  }
+});
 // app.get("/",(req,res)=>{
 //     res.send("your server is running");
 // });
