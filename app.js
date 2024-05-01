@@ -15,7 +15,7 @@ const cors = require("cors");
 // app.use(cors());
 
 const corsOptions = {
-  origin: "https://ecommerce-website-vert-xi.vercel.app/",
+  origin: "http://localhost:3001",
   methods: "GET,POST",
   credentials: true, // Enable cookies across domains
 };
