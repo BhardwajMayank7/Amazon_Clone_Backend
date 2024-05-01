@@ -13,6 +13,7 @@ const authenicate = require("../middleware/authenticate");
 
 router.get("/", async (req, res) => {
   try {
+    console.log("url hitted is : ", req?.url);
     res.json("Express running smoothly and fantastically");
   } catch (error) {
     console.log("error" + error.message);
