@@ -14,8 +14,9 @@ const cors = require("cors");
 
 // app.use(cors());
 
+// Here we cannot use * to allow all origins as we are using credentials also , this is a rule
 const corsOptions = {
-  origin: "*",
+  origin: "http://localhost:3000",
   methods: "GET,POST",
   credentials: true, // Enable cookies across domains
 };

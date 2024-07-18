@@ -3,7 +3,7 @@ const router = new express.Router();
 const products = require("../models/productsSchema");
 const User = require("../models/userSchema");
 const bcrypt = require("bcryptjs");
-const authenicate = require("../middleware/authenticate");
+const authenticate = require("../middleware/authenticate");
 
 // router.get("/",(req,res)=>{
 //     res.send("this is testing routes");
@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
 router.get("/getproducts", async (req, res) => {
   try {
     const productsData = await products.find();
-    // console.log(productsData + "data mila hain");
+    console.log(productsData + "data mila hain");
     res.status(201).json(productsData);
   } catch (error) {
     console.log("error" + error.message);
@@ -31,44 +31,50 @@ router.get("/getproducts", async (req, res) => {
 });
 
 // register the data
+
 router.post("/register", async (req, res) => {
-  // console.log(req.body);
   const { fname, email, mobile, password, cpassword } = req.body;
 
   if (!fname || !email || !mobile || !password || !cpassword) {
-    res.status(422).json({ error: "filll the all details" });
-    console.log("bhai nathi present badhi details");
+    return res.status(422).json({ error: "Fill all the details" });
   }
 
   try {
-    const preuser = await User.findOne({ email: email });
+    const preUserByEmail = await User.findOne({ email: email });
+    const preUserByMobile = await User.findOne({ mobile: mobile });
 
-    if (preuser) {
-      res.status(422).json({ error: "This email is already exist" });
-    } else if (password !== cpassword) {
-      res.status(422).json({ error: "password are not matching" });
-    } else {
-      const finaluser = new User({
-        fname,
-        email,
-        mobile,
-        password,
-        cpassword,
-      });
-
-      // yaha pe hasing krenge
-
-      const storedata = await finaluser.save();
-      // console.log(storedata + "user successfully added");
-      res.status(201).json(storedata);
+    if (preUserByEmail) {
+      return res.status(422).json({ error: "This email already exists" });
     }
+
+    if (preUserByMobile) {
+      return res.status(422).json({ error: "This mobile number already exists" });
+    }
+
+    if (password !== cpassword) {
+      return res.status(422).json({ error: "Passwords do not match" });
+    }
+
+    const finalUser = new User({
+      fname,
+      email,
+      mobile,
+      password,
+      cpassword,
+    });
+
+    // The password hashing is handled in the pre-save hook of the schema
+    const storedData = await finalUser.save();
+    res.status(201).json(storedData);
   } catch (error) {
-    console.log(
-      "error the bhai catch ma for registratoin time" + error.message
-    );
-    res.status(422).send(error);
+    console.log("Error in registration: " + error.message);
+    if (error.code === 11000) {
+      return res.status(422).json({ error: "Duplicate value error: " + JSON.stringify(error.keyValue) });
+    }
+    res.status(500).json({ error: "Internal server error" });
   }
 });
+
 
 // login data
 router.post("/login", async (req, res) => {
@@ -123,7 +129,7 @@ router.get("/getproductsone/:id", async (req, res) => {
 });
 
 // adding the data into cart
-router.post("/addcart/:id", authenicate, async (req, res) => {
+router.post("/addcart/:id", authenticate, async (req, res) => {
   try {
     console.log("perfect 6");
     const { id } = req.params;
@@ -147,7 +153,7 @@ router.post("/addcart/:id", authenicate, async (req, res) => {
 });
 
 // get data into the cart
-router.get("/cartdetails", authenicate, async (req, res) => {
+router.get("/cartdetails", authenticate, async (req, res) => {
   try {
     const buyuser = await User.findOne({ _id: req.userID });
     console.log(buyuser + "user hain buy pr");
@@ -158,9 +164,10 @@ router.get("/cartdetails", authenicate, async (req, res) => {
 });
 
 // get user is login or not
-router.get("/validuser", authenicate, async (req, res) => {
+router.get("/validuser", authenticate, async (req, res) => {
   try {
     const validuserone = await User.findOne({ _id: req.userID });
+    console.log("validuserone  :  ",validuserone)
     console.log(validuserone + "user hain home k header main pr");
     res.status(201).json(validuserone);
   } catch (error) {
@@ -170,7 +177,7 @@ router.get("/validuser", authenicate, async (req, res) => {
 
 // for userlogout
 
-router.get("/logout", authenicate, async (req, res) => {
+router.get("/logout", authenticate, async (req, res) => {
   try {
     req.rootUser.tokens = req.rootUser.tokens.filter((curelem) => {
       return curelem.token !== req.token;
@@ -188,7 +195,7 @@ router.get("/logout", authenicate, async (req, res) => {
 // item remove ho rhi hain lekin api delete use krna batter hoga
 // remove iteam from the cart
 
-router.get("/remove/:id", authenicate, async (req, res) => {
+router.get("/remove/:id", authenticate, async (req, res) => {
   try {
     const { id } = req.params;
 
