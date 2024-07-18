@@ -36,6 +36,6 @@ if (process.env.NODE_ENV == "production") {
   app.use(express.static("client/build"));
 }
 
-app.listen(port, () => {
+app.listen(port,"0.0.0.0", () => {
   console.log(`your server is running on port ${port} `);
 });
