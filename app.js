@@ -19,7 +19,8 @@ const cors = require("cors");
 const corsOptions = {
   origin: "https://amazon-clone-kur5yqe6q-bhardwajmayank7s-projects.vercel.app",
   methods: "GET,POST",
-  credentials: true, // Enable cookies across domains
+  credentials: true, // Enable cookies across domains,
+  allowedHeaders: ["Content-Type", "Authorization"], // Add other headers if needed
 };
 
 app.use(cors(corsOptions));
