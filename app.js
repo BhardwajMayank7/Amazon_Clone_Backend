@@ -17,7 +17,7 @@ const cors = require("cors");
 
 // Here we cannot use * to allow all origins as we are using credentials also , this is a rule
 const corsOptions = {
-  origin: "https://amazon-clone-bhardwajmayank7-bhardwajmayank7s-projects.vercel.app",
+  origin: "https://amazon-clone-bhardwajmayank7-bhardwajmayank7s-projects.vercel.app/",
   methods: "GET,POST",
   credentials: true, // Enable cookies across domains,
 };
