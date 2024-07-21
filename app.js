@@ -20,6 +20,7 @@ const corsOptions = {
   origin: "https://amazon-clone-bhardwajmayank7-bhardwajmayank7s-projects.vercel.app",
   methods: "GET,POST",
   credentials: true, // Enable cookies across domains,
+  allowedHeaders: ["Content-Type", "Authorization"], 
 };
 
 app.use(cors(corsOptions));
